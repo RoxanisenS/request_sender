@@ -3,12 +3,25 @@ import datetime
 import logging
 import requests
 import time
+import os.path
+import sys
+
 
 BASE_URL = "https://api.distancematrix.ai"
 
 DATA_FILE_PATH = "data.csv"
 RESULT_FILE_PATH = "result.csv"
 TOKEN_FILE_PATH = "token.txt"
+
+if(os.path.exists(TOKEN_FILE_PATH)!=True):
+    print('No token.txt file with API token. Please contact alina.lysykh@distancematrix.ai for help \n')
+    exit=input("press close to exit")
+    sys.exit()
+
+if(os.path.exists(DATA_FILE_PATH)!=True):
+    print('No data.csv file with raw data. Please contact alina.lysykh@distancematrix.ai for help \n')
+    exit=input("press close to exit")
+    sys.exit()
 
 with open(TOKEN_FILE_PATH, "r") as file:
     API_KEY = file.read()
@@ -36,7 +49,7 @@ def load_data():
                 "departure_time": "%s" % departure_time.replace('&', ' ')
             })
             count_rows+=1
-        print("Total rows in CSV = %s" % (count_rows))
+        print(" \nTotal rows in CSV = %s \n" % (count_rows))
         return data
 
 def make_request(base_url, api_key, origin, destination, mode, traffic_model, departure_time):
@@ -112,6 +125,6 @@ if __name__ == '__main__':
 with open(RESULT_FILE_PATH) as f:
    count_result_rows = sum(1 for _ in f) - 1
 
-print(f'{count_result_rows} / {count_data_rows} -> Calculated correctly')
-
+print(f' \n{count_result_rows} / {count_data_rows} -> Calculated correctly')
+print(' \nHelp is needed? Please contact alina.lysykh@distancematrix.ai \n')
 exit=input("press close to exit")
